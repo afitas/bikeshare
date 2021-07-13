@@ -1,0 +1,13 @@
+----------------------------------------------Helpfull linck to solving BikeShare-project-----------------------------------------
+-
+**Finding away for Managing errors on the input**
+https://stackoverflow.com/questions/23294658/asking-the-user-for-input-until-they-give-a-valid-response
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+**weekday_name errors solving**
+https://stackoverflow.com/questions/60214194/error-in-reading-stock-data-datetimeproperties-object-has-no-attribute-week
+
+------------------------------------------------------------------------------------------------------------------------------------
+**counting NaN value**
+https://stackoverflow.com/questions/40226670/calculate-useful-order-statistics-using-describe-with-nan-in-dataframe

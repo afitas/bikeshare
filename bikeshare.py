@@ -158,8 +158,7 @@ def station_stats(df):
     print('The most common End Station is:', common_end_station)
 
     # display most frequent combination of start station and end station trip
-    tupple =  df['End Station','station trip'].mode()[0]
-    print('The most ccombination of start station and end station trip is:', tupple)
+  
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -190,18 +189,12 @@ def user_stats(df):
     start_time = time.time()
 
     # Display counts of user types
-    cout_user_Subscriber = df['User Type'].value_counts()[0] 
-    print('The total count for Subscribers:', cout_user_Subscriber) 
-
-    cout_user_Customers = df['User Type'].value_counts()[1] 
-    print('The total count for Customers:', cout_user_Customers)
+    counts_of_user_types = df['User Type'].value_counts(dropna=False) 
+    print('The total counts of user types:', counts_of_user_types) 
 
     # Display counts of gender
-    cout_gender_Male = df['Gender'].value_counts()[0] 
-    print('The total count for User gender Male:', cout_gender_Male) 
-
-    cout_gender_Female = df['Gender'].value_counts()[1] 
-    print('The total count for User gender Femele:', cout_gender_Female)
+    counts_of_gender = df['Gender'].value_counts(dropna=False) 
+    print('The total counts of gender:', counts_of_gender) 
 
     # Display earliest, most recent, and most common year of birth
 
