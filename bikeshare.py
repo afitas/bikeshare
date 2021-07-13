@@ -24,14 +24,14 @@ def get_filters():
     while True:
         try:
             city = str(input("Please entre the city from this list (chicago, new york city, washington), OR For exiting the app, please enter (exit) \n:"))
-            if city in city_list:
+            if city == "exit":
+                print("Goud Bye...")                      
+                return -1;   
+            elif city in city_list:
                 print("City entered successfully...", city)
                 break;
             elif city != "exit":
                 print("Please Tray Again, the city should be selecteted from this list (chicago, new york city, washington)")   
-            else:
-                print("Goud Bye...")                      
-                return -1;   
         except ValueError:
             print("Provide a valide string value!...")
             continue
@@ -190,10 +190,18 @@ def user_stats(df):
     start_time = time.time()
 
     # Display counts of user types
+    cout_user_Subscriber = df['User Type'].value_counts()[0] 
+    print('The total count for Subscribers:', cout_user_Subscriber) 
 
+    cout_user_Customers = df['User Type'].value_counts()[1] 
+    print('The total count for Customers:', cout_user_Customers)
 
     # Display counts of gender
+    cout_gender_Male = df['Gender'].value_counts()[0] 
+    print('The total count for User gender Male:', cout_gender_Male) 
 
+    cout_gender_Female = df['Gender'].value_counts()[1] 
+    print('The total count for User gender Femele:', cout_gender_Female)
 
     # Display earliest, most recent, and most common year of birth
 
@@ -205,20 +213,25 @@ def user_stats(df):
 def main():
     while True:
         
-        if get_filters() == -1 :
-            return 
-        city, month, day = get_filters()
-      
-        df = load_data(city, month, day)
+        #if get_filters() == -1 :
+         #   return 
+        try :
+            city, month, day = get_filters()
 
-        time_stats(df)
-        station_stats(df)
-        trip_duration_stats(df)
-        user_stats(df)
+            df = load_data(city, month, day)
 
-        restart = input('\nWould you like to restart? Enter yes or no.\n')
-        if restart.lower() != 'yes':
-            break
+            time_stats(df)
+            station_stats(df)
+            trip_duration_stats(df)
+            user_stats(df)
+
+            restart = input('\nWould you like to restart? Enter yes or no.\n')
+            if restart.lower() != 'yes':
+                break
+        except Exception  as e:
+            print(str(e))
+            break;
+        
 
 
 if __name__ == "__main__":
