@@ -118,13 +118,25 @@ def time_stats(df):
     start_time = time.time()
 
     # display the most common month
-
+    common_month =  df['month'].mode()[0]
+    print('Most common month:', common_month)
 
     # display the most common day of week
-
+    common_day_of_week =  df['day_of_week'].mode()[0]
+    print('Most common day of week:', common_day_of_week)
 
     # display the most common start hour
 
+    # convert the Start Time column to datetime
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+
+    # extract hour from the Start Time column to create an hour column
+    df['hour'] = df['Start Time'].dt.hour
+
+    # find the most common hour (from 0 to 23)
+    common_hour =  df['hour'].mode()[0]
+        
+    print('Most common Hour:', common_hour)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -137,13 +149,17 @@ def station_stats(df):
     start_time = time.time()
 
     # display most commonly used start station
+    common_start_station =  df['Start Station'].mode()[0]
+    print('The most common Start Station is:', common_start_station)
 
 
     # display most commonly used end station
-
+    common_end_station =  df['End Station'].mode()[0]
+    print('The most common End Station is:', common_end_station)
 
     # display most frequent combination of start station and end station trip
-
+    tupple =  df['End Station','station trip'].mode()[0]
+    print('The most ccombination of start station and end station trip is:', tupple)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -156,10 +172,12 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
-
+    total_travel_time = df['Trip Duration'].sum()
+    print('The total travel time is:', total_travel_time)
 
     # display mean travel time
-
+    avg = df['Trip Duration'].describe()[1]
+    print('The Average trip duration is:', avg)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
