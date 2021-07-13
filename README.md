@@ -20,8 +20,10 @@ This repo include all that files:
 - chicago.csv (optinally)
 - new_york_city.csv
 - washington.csv
+- Links.txt
 
 
 ### Credits
 It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
+You can find in this repo usful links according the this project in this file : Links.txt.
 
