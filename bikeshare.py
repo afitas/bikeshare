@@ -86,29 +86,14 @@ def load_data(city, month, day):
     """
     # load data file into a dataframe
     df = pd.read_csv(CITY_DATA[city])
-
-    # convert the Start Time column to datetime
     df['Start Time'] = pd.to_datetime(df['Start Time'])
-
-    # extract month and day of week from Start Time to create new columns
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.day_name()
-
-    # filter by month if applicable
     if month != 'all':
-        # use the index of the months list to get the corresponding int
-        month_list = ['January', 'February', 'March','April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         month = month_list.index(month) + 1
-
-        # filter by month to create the new dataframe
         df = df[df['month'] == month]
-
-    # filter by day of week if applicable
     if day != 'all':
-        # filter by day of week to create the new dataframe
         df = df[df['day_of_week'] == day.title()]
-
-
     return df
 
 
@@ -181,53 +166,50 @@ def trip_duration_stats(df):
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
-    try:
-        print('\nCalculating User Stats...\n')
-        start_time = time.time()
 
-        # Display counts of user types
-        counts_of_user_types = df['User Type'].value_counts(dropna=False) 
-        if counts_of_user_types.empty == False:  
-            print('The total counts of user types is:\n', counts_of_user_types) 
+    print('\nCalculating User Stats...\n')
+    start_time = time.time()
+
+    # Display counts of user types
+    counts_of_user_types = df['User Type'].value_counts(dropna=False) 
+    if counts_of_user_types.empty == False:  
+        print('The total counts of user types is:\n', counts_of_user_types) 
+    else:
+        print('The total counts of user types is: No data to compute\n')
+
+    # Display counts of gender
+    if ('Gender' in df.columns):
+        counts_of_gender = df['Gender'].value_counts(dropna=False)
+        if counts_of_gender.empty == False:
+            print('\nThe total counts of gender:\n', counts_of_gender) 
         else:
-            print('The total counts of user types is: No data to compute\n')
-    
-        
-        # # Display counts of gender
-        if ('Gender' in df.columns):
-            counts_of_gender = df['Gender'].value_counts(dropna=False)
-            if counts_of_gender.empty == False:
-                print('\nThe total counts of gender:\n', counts_of_gender) 
-            else:
-                print('\nThe total counts of gender: No data to compute\n')
+            print('\nThe total counts of gender: No data to compute\n')
+    else:
+        print('\nThere is No Gender columns is this data set\n')
+
+    # Display earliest, most recent, and most common year of birth
+    if ('Birth Year' in df.columns):
+        earliest_year_birth = df['Birth Year'].describe()[3]
+        if earliest_year_birth != np.NaN:
+            print('\nThe earliest year of birth is:', earliest_year_birth) 
         else:
-            print('\nThere is No Gender columns is this data set\n')
+            print('\nThe earliest year of birth is: No data to compute')
 
-        # Display earliest, most recent, and most common year of birth
-        if ('Birth Year' in df.columns):
-            earliest_year_birth = df['Birth Year'].describe()[3]
-            if earliest_year_birth != np.NaN:
-                print('\nThe earliest year of birth is:', earliest_year_birth) 
-            else:
-                print('\nThe earliest year of birth is: No data to compute')
-
-            most_recent  = df['Birth Year'].describe()[7] 
-            if most_recent != np.NaN:
-                print('The most recent year of birth is:', most_recent)
-            else:
-                print('The most recent year of birth is: No data to compute')
-
-            most_common_year_of_birth = df['Birth Year'].mode()[0]
-            if most_common_year_of_birth != np.NaN:
-                print('The most common year of birth is:', most_common_year_of_birth) 
-            else:
-                print('The most common year of birth is: No data to compute')
+        most_recent  = df['Birth Year'].describe()[7] 
+        if most_recent != np.NaN:
+            print('The most recent year of birth is:', most_recent)
         else:
-            print('\nThere is No Birth Year columns is this data set\n')
+            print('The most recent year of birth is: No data to compute')
 
-    except Exception as e:
-        print(str(e))
+        most_common_year_of_birth = df['Birth Year'].mode()[0]
+        if most_common_year_of_birth != np.NaN:
+            print('The most common year of birth is:', most_common_year_of_birth) 
+        else:
+            print('The most common year of birth is: No data to compute')
+    else:
+        print('\nThere is No Birth Year columns is this data set\n')
 
+  
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
@@ -247,8 +229,6 @@ def main():
             if restart.lower() != 'yes':
                 break
         except Exception  as e:
-            print("aaaaa")
-            print(str(e))
             break;
         
 
