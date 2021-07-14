@@ -5,6 +5,9 @@ import numpy as np
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+city_list = ['chicago', 'new york city', 'washington']
+month_list = ['January', 'February', 'March','April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+day_list = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ,'Sunday']
 
 def get_filters():
     """
@@ -15,9 +18,7 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
-    city_list = ['chicago', 'new york city', 'washington']
-    month_list = ['January', 'February', 'March','April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    day_list = ['Monday', 'Tuesday', 'Wednesday ', 'Thursday', 'Friday', 'Saturday' ,'Sunday']
+    
 
     print('Hello! Let\'s explore some US bikeshare data!')
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
@@ -119,23 +120,17 @@ def time_stats(df):
 
     # display the most common month
     common_month =  df['month'].mode()[0]
-    print('Most common month:', common_month)
+    common_month_txt = month_list[common_month-1]
+    print('Most common month:', common_month_txt)
 
     # display the most common day of week
     common_day_of_week =  df['day_of_week'].mode()[0]
     print('Most common day of week:', common_day_of_week)
 
     # display the most common start hour
-
-    # convert the Start Time column to datetime
     df['Start Time'] = pd.to_datetime(df['Start Time'])
-
-    # extract hour from the Start Time column to create an hour column
     df['hour'] = df['Start Time'].dt.hour
-
-    # find the most common hour (from 0 to 23)
     common_hour =  df['hour'].mode()[0]
-        
     print('Most common Hour:', common_hour)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -158,7 +153,9 @@ def station_stats(df):
     print('The most common End Station is:', common_end_station)
 
     # display most frequent combination of start station and end station trip
-  
+    df['concat_traval_station'] = 'FROM---> ' + df['Start Station'] + ' TO---> ' + df['End Station']
+    common_trip_station =  df['concat_traval_station'].mode()[0]
+    print('The most most frequent combination of start station and end station trip is:', common_trip_station)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -184,20 +181,52 @@ def trip_duration_stats(df):
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
+    try:
+        print('\nCalculating User Stats...\n')
+        start_time = time.time()
 
-    print('\nCalculating User Stats...\n')
-    start_time = time.time()
+        # Display counts of user types
+        counts_of_user_types = df['User Type'].value_counts(dropna=False) 
+        if counts_of_user_types.empty == False:  
+            print('The total counts of user types is:\n', counts_of_user_types) 
+        else:
+            print('The total counts of user types is: No data to compute\n')
+    
+        
+        # # Display counts of gender
+        if ('Gender' in df.columns):
+            counts_of_gender = df['Gender'].value_counts(dropna=False)
+            if counts_of_gender.empty == False:
+                print('\nThe total counts of gender:\n', counts_of_gender) 
+            else:
+                print('\nThe total counts of gender: No data to compute\n')
+        else:
+            print('\nThere is No Gender columns is this data set\n')
 
-    # Display counts of user types
-    counts_of_user_types = df['User Type'].value_counts(dropna=False) 
-    print('The total counts of user types:', counts_of_user_types) 
+        # Display earliest, most recent, and most common year of birth
+        if ('Birth Year' in df.columns):
+            earliest_year_birth = df['Birth Year'].describe()[3]
+            if earliest_year_birth != np.NaN:
+                print('\nThe earliest year of birth is:', earliest_year_birth) 
+            else:
+                print('\nThe earliest year of birth is: No data to compute')
 
-    # Display counts of gender
-    counts_of_gender = df['Gender'].value_counts(dropna=False) 
-    print('The total counts of gender:', counts_of_gender) 
+            most_recent  = df['Birth Year'].describe()[7] 
+            if most_recent != np.NaN:
+                print('The most recent year of birth is:', most_recent)
+            else:
+                print('The most recent year of birth is: No data to compute')
 
-    # Display earliest, most recent, and most common year of birth
+            most_common_year_of_birth = df['Birth Year'].mode()[0]
+            if most_common_year_of_birth != np.NaN:
+                print('The most common year of birth is:', most_common_year_of_birth) 
+            else:
+                print('The most common year of birth is: No data to compute')
+        else:
+            print('\nThere is No Birth Year columns is this data set\n')
 
+    except Exception as e:
+        print(str(e))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -205,14 +234,10 @@ def user_stats(df):
 
 def main():
     while True:
-        
-        #if get_filters() == -1 :
-         #   return 
         try :
             city, month, day = get_filters()
 
             df = load_data(city, month, day)
-
             time_stats(df)
             station_stats(df)
             trip_duration_stats(df)
@@ -222,6 +247,7 @@ def main():
             if restart.lower() != 'yes':
                 break
         except Exception  as e:
+            print("aaaaa")
             print(str(e))
             break;
         
