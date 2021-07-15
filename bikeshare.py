@@ -6,8 +6,8 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 city_list = ['chicago', 'new york city', 'washington']
-month_list = ['January', 'February', 'March','April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-day_list = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ,'Sunday']
+month_list = ['january', 'february', 'march','april','may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+day_list = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ,'sunday']
 
 def get_filters():
     """
@@ -24,9 +24,9 @@ def get_filters():
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     while True:
         try:
-            city = str(input("Please entre the city from this list (chicago, new york city, washington), OR For exiting the app, please enter (exit) \n:"))
+            city = str(input("Please entre the city from this list (chicago, new york city, washington), OR For exiting the app, please enter (exit) \n:").lower())
             if city == "exit":
-                print("Goud Bye...")                      
+                print("Good Bye...")                      
                 return -1;   
             elif city in city_list:
                 print("City entered successfully...", city)
@@ -39,14 +39,14 @@ def get_filters():
     # get user input for month (all, january, february, ... , june)
     while True:
         try:
-            month = str(input("Please entre the month Ex: (January, February, March, ...), OR For exiting the app, please enter (exit) \n:"))
+            month = str(input("Please entre the month Ex: (january, february, ... , june), OR For exiting the app, please enter (exit) \n:").lower())
             if month in month_list:
                 print("month entered successfully...", month)
                 break;
             elif month != "exit":
-                print("Please Tray Again, the city should be selecteted from the Month of the year like (January, February, March, ...)")
+                print("Please Tray Again, the city should be selecteted from the Month of the year like (january, february, ... , june)")
             else:
-                print("Goud Bye...")
+                print("Good Bye...")
                 return -1;    
         except ValueError:
             print("Provide a valide string value!...")
@@ -56,14 +56,14 @@ def get_filters():
 
     while True :
         try:
-            day = str(input("Please entre the day Ex: (Monday, Tuesday, Wednesday, ...), OR For exiting the app, please enter (exit) \n:"))
+            day = str(input("Please entre the day Ex: (monday, tuesday, ... sunday), OR For exiting the app, please enter (exit) \n:").lower())
             if day in day_list:
                 print("day entered successfully...", day)
                 break;
             elif month != "exit":
-                print("Please Tray Again, the city should be selecteted from the day of the week like (Monday, Tuesday, Wednesday, ...)")         
+                print("Please Tray Again, the city should be selecteted from the day of the week like (monday, tuesday, ... sunday)")         
             else:
-                print("Goud Bye...") 
+                print("Good Bye...") 
                 return -1;  
         except ValueError:
             print("Provide a valide string value!...")
@@ -97,7 +97,6 @@ def load_data(city, month, day):
     # filter by month if applicable
     if month != 'all':
         # use the index of the months list to get the corresponding int
-        month_list = ['January', 'February', 'March','April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         month = month_list.index(month) + 1
 
         # filter by month to create the new dataframe
@@ -178,6 +177,24 @@ def trip_duration_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def Show_Data(df):
+    """This function is for asking the user whether he wants to see 5 rows of data. 
+    We will show the first 5 rows and after submitting and other question: " Do you want to see the next 5 rows of data?"
+    until he say no or total row exided the limt of data """
+
+    view_data = str(input('\nWould you like to view 5 rows of individual trip data? Enter (yes or no)\n').lower())
+    start_loc = 0
+    total_row = df.shape[0] - 1
+
+    while (view_data == 'yes' and start_loc <= total_row):
+        # i put here a double check to indicate to the user that he rich the limit of the data
+        if(start_loc <= total_row):
+            print(df.iloc[start_loc:start_loc + 5])
+            start_loc += 5
+            view_data = input("Do you wish to continue? (yes or no): ").lower()
+        else:
+            print("Data out of range! (exiding the limit of data)")
+            break
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
@@ -232,6 +249,8 @@ def user_stats(df):
     print('-'*40)
 
 
+
+
 def main():
     while True:
         try :
@@ -243,12 +262,16 @@ def main():
             trip_duration_stats(df)
             user_stats(df)
 
-            restart = input('\nWould you like to restart? Enter yes or no.\n')
+            restart = str(input('\nWould you like to go throuth showing data\n').lower())
             if restart.lower() != 'yes':
+                print("Good Bye...")      
                 break
+            else:
+                Show_Data(df)
+                print("Good Bye...")      
+                break
+        
         except Exception  as e:
-            print("aaaaa")
-            print(str(e))
             break;
         
 
