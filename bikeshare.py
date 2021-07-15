@@ -262,7 +262,7 @@ def main():
             trip_duration_stats(df)
             user_stats(df)
 
-            restart = str(input('\nWould you like to go throuth showing data\n').lower())
+            restart = str(input('\nWould you like to go throuth showing data (yes or no)\n').lower())
             if restart.lower() != 'yes':
                 print("Good Bye...")      
                 break
